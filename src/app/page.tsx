@@ -13,13 +13,36 @@ import { Product, CartItem, Payment } from '@/types';
 import { supabase } from '@/lib/supabase';
 import { mockProducts } from '@/data/mockProducts';
 
+import Cookies from 'js-cookie';
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>(mockProducts);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
 
   const total = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
   const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Load cart from cookie on mount
+  useEffect(() => {
+    const savedCart = Cookies.get('pdv_cart');
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (e) {
+        console.error('Failed to parse cart cookie', e);
+      }
+    }
+    setIsCartLoaded(true);
+  }, []);
+
+  // Save cart to cookie whenever it changes
+  useEffect(() => {
+    if (isCartLoaded) {
+      Cookies.set('pdv_cart', JSON.stringify(cartItems), { expires: 1 });
+    }
+  }, [cartItems, isCartLoaded]);
 
   // Fetch products from Supabase
   useEffect(() => {
@@ -114,7 +137,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen lg:h-screen bg-gray-50 flex flex-col lg:overflow-hidden">
       {/* Header */}
       <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white px-6 py-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
