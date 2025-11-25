@@ -62,7 +62,6 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
   const resetState = () => {
     setSelectedMethod(null);
     setCashReceived('');
-    setChange(0);
   };
 
   const handleClose = () => {
