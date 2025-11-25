@@ -44,7 +44,7 @@ export default function ProductInput({ onAddProduct, products }: ProductInputPro
   };
 
   return (
-    <div className="bg-white border border-black p-4">
+    <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
       <div className="flex items-center gap-3">
         <TextField
           label="Código do Produto"
@@ -61,25 +61,28 @@ export default function ProductInput({ onAddProduct, products }: ProductInputPro
           className="flex-1"
           sx={{
             '& .MuiOutlinedInput-root': {
+              borderRadius: '10px',
               '& fieldset': {
-                borderColor: 'black',
+                borderColor: '#e2e8f0',
+                borderWidth: '2px',
               },
               '&:hover fieldset': {
-                borderColor: 'black',
+                borderColor: '#cbd5e1',
               },
               '&.Mui-focused fieldset': {
-                borderColor: 'black',
+                borderColor: '#0f172a',
+                borderWidth: '2px',
               },
             },
             '& .MuiInputLabel-root': {
-              color: 'gray',
+              color: '#64748b',
             },
             '& .MuiInputLabel-root.Mui-focused': {
-              color: 'black',
+              color: '#0f172a',
             },
           }}
         />
-        
+
         <TextField
           label="Qtd"
           type="number"
@@ -92,41 +95,49 @@ export default function ProductInput({ onAddProduct, products }: ProductInputPro
           className="w-20"
           sx={{
             '& .MuiOutlinedInput-root': {
+              borderRadius: '10px',
               '& fieldset': {
-                borderColor: 'black',
+                borderColor: '#e2e8f0',
+                borderWidth: '2px',
               },
               '&:hover fieldset': {
-                borderColor: 'black',
+                borderColor: '#cbd5e1',
               },
               '&.Mui-focused fieldset': {
-                borderColor: 'black',
+                borderColor: '#0f172a',
+                borderWidth: '2px',
               },
             },
             '& .MuiInputLabel-root': {
-              color: 'gray',
+              color: '#64748b',
             },
             '& .MuiInputLabel-root.Mui-focused': {
-              color: 'black',
+              color: '#0f172a',
             },
           }}
         />
-        
-        <IconButton 
+
+        <IconButton
           onClick={handleSearch}
-          className="bg-black text-white hover:bg-gray-800 rounded"
           sx={{
-            backgroundColor: 'black',
+            backgroundColor: '#0f172a',
             color: 'white',
+            borderRadius: '12px',
+            padding: '10px',
+            transition: 'all 0.2s',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
             '&:hover': {
-              backgroundColor: '#333',
+              backgroundColor: '#1e293b',
+              transform: 'translateY(-2px)',
+              boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
             },
           }}
         >
           <AddShoppingCartIcon />
         </IconButton>
       </div>
-      
-      <div className="mt-3 text-xs text-gray-500">
+
+      <div className="mt-4 text-xs text-gray-500">
         <span className="flex items-center gap-1">
           <SearchIcon fontSize="small" />
           Digite o código e pressione Enter ou clique no botão

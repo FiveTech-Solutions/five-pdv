@@ -11,21 +11,10 @@ import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import Button from '@mui/material/Button';
 import { Product, CartItem, Payment } from '@/types';
 import { supabase } from '@/lib/supabase';
-
-// Sample products for demonstration (will be replaced by Supabase data)
-const sampleProducts: Product[] = [
-  { id: '1', code: '001', name: 'Arroz Branco 5kg', price: 25.90, unit: 'un' },
-  { id: '2', code: '002', name: 'Feijão Carioca 1kg', price: 8.50, unit: 'un' },
-  { id: '3', code: '003', name: 'Açúcar Cristal 1kg', price: 5.20, unit: 'un' },
-  { id: '4', code: '004', name: 'Óleo de Soja 900ml', price: 7.90, unit: 'un' },
-  { id: '5', code: '005', name: 'Café Torrado 500g', price: 18.90, unit: 'un' },
-  { id: '6', code: '006', name: 'Leite Integral 1L', price: 5.50, unit: 'un' },
-  { id: '7', code: '007', name: 'Pão Francês', price: 0.80, unit: 'un' },
-  { id: '8', code: '008', name: 'Margarina 500g', price: 6.90, unit: 'un' },
-];
+import { mockProducts } from '@/data/mockProducts';
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>(sampleProducts);
+  const [products, setProducts] = useState<Product[]>(mockProducts);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
@@ -38,7 +27,7 @@ export default function Home() {
       const { data, error } = await supabase
         .from('products')
         .select('*');
-      
+
       if (data && !error) {
         setProducts(data);
       }
@@ -51,7 +40,7 @@ export default function Home() {
   const handleAddProduct = (product: Product, quantity: number) => {
     setCartItems(prevItems => {
       const existingIndex = prevItems.findIndex(item => item.product.id === product.id);
-      
+
       if (existingIndex >= 0) {
         const newItems = [...prevItems];
         const newQuantity = newItems[existingIndex].quantity + quantity;
@@ -125,33 +114,33 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-black text-white px-6 py-4 flex items-center justify-between">
+      <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white px-6 py-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           <PointOfSaleIcon sx={{ fontSize: 32 }} />
           <h1 className="text-xl font-bold uppercase tracking-wider">Five PDV</h1>
         </div>
         <div className="text-sm text-gray-400">
-          {new Date().toLocaleDateString('pt-BR', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+          {new Date().toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
           })}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col lg:flex-row">
+      <main className="flex-1 flex flex-col lg:flex-row gap-6 p-6">
         {/* Left Panel - Product Input and List */}
-        <div className="flex-1 flex flex-col lg:w-1/2 border-r border-gray-200">
-          <div className="p-4">
+        <div className="flex-1 flex flex-col lg:w-1/2 bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="p-6">
             <ProductInput onAddProduct={handleAddProduct} products={products} />
           </div>
-          
-          <div className="flex-1 p-4 pt-0">
-            <ProductList 
+
+          <div className="flex-1 px-6 pb-6">
+            <ProductList
               items={cartItems}
               onUpdateQuantity={handleUpdateQuantity}
               onRemoveItem={handleRemoveItem}
@@ -160,13 +149,13 @@ export default function Home() {
         </div>
 
         {/* Right Panel - Total and Actions */}
-        <div className="lg:w-1/2 flex flex-col">
+        <div className="lg:w-1/2 flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="flex-1">
             <TotalDisplay total={total} itemCount={itemCount} />
           </div>
-          
+
           {/* Action Buttons */}
-          <div className="p-6 space-y-3 border-t border-gray-200">
+          <div className="p-6 space-y-3">
             <Button
               fullWidth
               variant="contained"
@@ -175,25 +164,30 @@ export default function Home() {
               onClick={() => setIsPaymentModalOpen(true)}
               disabled={cartItems.length === 0}
               sx={{
-                backgroundColor: 'black',
+                backgroundColor: '#0f172a',
                 color: 'white',
-                py: 2,
+                py: 2.5,
                 fontSize: '1.1rem',
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
+                borderRadius: '12px',
+                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                transition: 'all 0.2s',
                 '&:hover': {
-                  backgroundColor: '#333',
+                  backgroundColor: '#1e293b',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
                 },
                 '&:disabled': {
-                  backgroundColor: '#ccc',
-                  color: '#666',
+                  backgroundColor: '#cbd5e1',
+                  color: '#94a3b8',
                 },
               }}
             >
               Finalizar Compra
             </Button>
-            
+
             <Button
               fullWidth
               variant="outlined"
@@ -202,16 +196,20 @@ export default function Home() {
               onClick={handleClearCart}
               disabled={cartItems.length === 0}
               sx={{
-                borderColor: 'black',
-                color: 'black',
-                py: 1.5,
+                borderColor: '#64748b',
+                color: '#475569',
+                py: 2,
+                borderRadius: '12px',
+                borderWidth: '2px',
+                transition: 'all 0.2s',
                 '&:hover': {
-                  borderColor: 'black',
-                  backgroundColor: 'rgba(0,0,0,0.04)',
+                  borderColor: '#0f172a',
+                  backgroundColor: 'rgba(15, 23, 42, 0.04)',
+                  borderWidth: '2px',
                 },
                 '&:disabled': {
-                  borderColor: '#ccc',
-                  color: '#ccc',
+                  borderColor: '#e2e8f0',
+                  color: '#cbd5e1',
                 },
               }}
             >

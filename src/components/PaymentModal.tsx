@@ -86,15 +86,15 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
   ];
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
       PaperProps={{
         sx: {
-          borderRadius: 0,
-          border: '2px solid black',
+          borderRadius: 3,
+          boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
         }
       }}
     >
@@ -111,13 +111,13 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
         </div>
       ) : (
         <>
-          <DialogTitle className="flex items-center justify-between border-b border-black bg-black text-white">
+          <DialogTitle className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-800 text-white">
             <span className="font-bold uppercase tracking-wider">Finalizar Pagamento</span>
-            <IconButton onClick={handleClose} size="small" sx={{ color: 'white' }}>
+            <IconButton onClick={handleClose} size="small" sx={{ color: 'white', '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' } }}>
               <CloseIcon />
             </IconButton>
           </DialogTitle>
-          
+
           <DialogContent className="p-6">
             <div className="text-center mb-6 pt-4">
               <p className="text-sm text-gray-500 uppercase tracking-wider">Total a Pagar</p>
@@ -131,11 +131,10 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
                   <button
                     key={method}
                     onClick={() => setSelectedMethod(method)}
-                    className={`flex flex-col items-center justify-center p-4 border-2 transition-all ${
-                      selectedMethod === method
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 hover:border-black'
-                    }`}
+                    className={`flex flex-col items-center justify-center p-4 border-2 rounded-xl transition-all duration-200 ${selectedMethod === method
+                        ? 'border-slate-900 bg-slate-900 text-white shadow-lg scale-105'
+                        : 'border-gray-200 hover:border-slate-400 hover:shadow-md'
+                      }`}
                   >
                     <Icon sx={{ fontSize: 32 }} />
                     <span className="mt-2 font-medium">{label}</span>
@@ -145,7 +144,7 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
             </div>
 
             {selectedMethod === 'CASH' && (
-              <div className="space-y-4 border-t border-gray-200 pt-4">
+              <div className="space-y-4 border-t border-gray-100 pt-4">
                 <TextField
                   label="Valor Recebido"
                   variant="outlined"
@@ -156,27 +155,29 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
                   inputProps={{ inputMode: 'decimal' }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
                       '& fieldset': {
-                        borderColor: 'black',
+                        borderColor: '#e2e8f0',
                         borderWidth: 2,
                       },
                       '&:hover fieldset': {
-                        borderColor: 'black',
+                        borderColor: '#cbd5e1',
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: 'black',
+                        borderColor: '#0f172a',
+                        borderWidth: 2,
                       },
                     },
                     '& .MuiInputLabel-root.Mui-focused': {
-                      color: 'black',
+                      color: '#0f172a',
                     },
                   }}
                 />
-                
+
                 {change > 0 && (
-                  <div className="bg-gray-100 p-4 text-center">
-                    <p className="text-sm text-gray-600 uppercase tracking-wider">Troco</p>
-                    <p className="text-3xl font-bold font-mono text-black">{formatCurrency(change)}</p>
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl text-center border border-green-200">
+                    <p className="text-sm text-green-700 uppercase tracking-wider font-medium">Troco</p>
+                    <p className="text-3xl font-bold font-mono text-green-900">{formatCurrency(change)}</p>
                   </div>
                 )}
 
@@ -188,34 +189,44 @@ export default function PaymentModal({ open, total, onClose, onConfirm }: Paymen
               </div>
             )}
           </DialogContent>
-          
-          <DialogActions className="p-4 border-t border-gray-200">
-            <Button 
+
+          <DialogActions className="p-6 border-t border-gray-100">
+            <Button
               onClick={handleClose}
               variant="outlined"
               sx={{
-                borderColor: 'black',
-                color: 'black',
+                borderColor: '#64748b',
+                color: '#475569',
+                borderRadius: '10px',
+                borderWidth: '2px',
+                px: 3,
+                py: 1.5,
                 '&:hover': {
-                  borderColor: 'black',
-                  backgroundColor: 'rgba(0,0,0,0.04)',
+                  borderColor: '#0f172a',
+                  backgroundColor: 'rgba(15, 23, 42, 0.04)',
+                  borderWidth: '2px',
                 },
               }}
             >
               Cancelar
             </Button>
-            <Button 
+            <Button
               onClick={handleConfirmPayment}
               variant="contained"
               disabled={!canConfirm()}
               sx={{
-                backgroundColor: 'black',
+                backgroundColor: '#0f172a',
                 color: 'white',
+                borderRadius: '10px',
+                px: 4,
+                py: 1.5,
+                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                 '&:hover': {
-                  backgroundColor: '#333',
+                  backgroundColor: '#1e293b',
+                  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
                 },
                 '&:disabled': {
-                  backgroundColor: '#ccc',
+                  backgroundColor: '#cbd5e1',
                 },
               }}
             >
